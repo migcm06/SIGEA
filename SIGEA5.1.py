@@ -1,6 +1,11 @@
 import random
 import string
 import os
+from datetime import datetime
+
+#definiendo fecha de inicio
+fecha_inicio = datetime(2024, 7, 29)
+
 caracteres = string.ascii_letters + string.digits  # Lista que almacena caracteres para hacer la contraseña
 admin = "Admin"
 admin_password = "1234"  # Creación de las credenciales de acceso del Admin
@@ -77,6 +82,7 @@ while True:
                 print("7. Eliminar Aprendíz")#LISTO
                 print("8. Salir") #LISTO
                 opcion_admin = input("Seleccione una opción:")
+                os.system('cls')
                 # Salir del modo administrador
                 if opcion_admin == "8":
                     admin_mood = False
@@ -127,9 +133,36 @@ while True:
                         os.system('cls')
                 elif opcion_admin == "4":
                     os.system('cls')
-                    print("Desbloquear usuario por ingreso erróneo") #VGbOjYcX
-                    print("No se ha encontrados ningún usuario bloqueado")
-                    os.system('cls')
+                    print("\nDesbloquear usuario por ingreso erróneo") #VGbOjYcXprint
+                    print("**Lista de aprendices bloqueados**")
+                    
+                    if aprendices_bloqueados:
+                        for i, bloqueado in enumerate(aprendices_bloqueados, start=1):
+                            print(f"{i}. {bloqueado}")
+                        #El admin eligir´pa cual usuario se va a desbloquear
+                        try:
+                            seleccion = int(input("Ingrese el número del usuario que desea desbloquear: ")) - 1
+                            if 0 <= seleccion < len(aprendices_bloqueados):
+                                usuario_a_desbloquear = aprendices_bloqueados.pop(seleccion)
+                                print(f"Usuario a desbloquear: {usuario_a_desbloquear}")
+                                # Buscar el usuario en aprendices_info y restaurar su contraseña original si es necesario
+                                for aprendiz in aprendices_info:
+                                    if aprendiz[6] == usuario_a_desbloquear:
+                                        documento = aprendiz[2]
+                                        aprendiz[5] = documento  # Cambiar a la contraseña que quieras asignar por defecto
+                                        desbloqueado = True
+                                        print(f"El usuario {usuario_a_desbloquear} ha sido desbloqueado y su contraseña ha sido cambiada al número de documento.")
+                                        break
+                                else:
+                                    print("El usuario no se ha encontrado en la lista de aprendices")
+                            else:
+                                print("Selección inválida.")
+                        except ValueError:
+                            print("Por favor, ingrese un número valido.")
+                    else:                     
+                        print("No hay aprendices bloqueados aun")
+                    print("\n" * 3)
+                    input("Enter para continuar")
                 elif opcion_admin == "3":
                     os.system('cls')
                     print("Modificar Usuario")
@@ -222,7 +255,7 @@ while True:
                             while True:
                                 continuar_registro = input("Continuar registrando? (si/no): ").lower()
                                 if continuar_registro == "si":
-                                    breakpoint
+                                    break
                                 elif continuar_registro == "no":
                                     modo_registro = False
                                     salir_modo_registro = True
@@ -232,9 +265,9 @@ while True:
                                     break
                                 else:
                                     print("Por favor ingrese una opción para continuar")
-                elif opcion_admin != ("1","2","3","4","5","6","7"):
+                elif opcion_admin != ("1","2","3","4","5","6","7","8"):
                     print("Opción invalida")
-                    print("Digite una opción valida entre los números 1 y 7")
+                    print("Digite una opción valida entre los números 1 y 8")
                 else:
                     print("ERROR: Digite por favor una opción para continuar")
     elif interaccion == "2":  # Ingreso del APRENDIZ
@@ -280,6 +313,7 @@ while True:
                     print(f"El usuario es {i[6]}.")
                     encontrado = True
                     break
+
             if not encontrado:
                 print("Documento no encontrado.")
             input("Presione Enter para regresar al menú principal.")
@@ -338,6 +372,8 @@ while True:
             os.system('cls')      
         elif interaccion_aprendiz == "1":
             login_exitoso = False
+            intentos_fallidos = 0
+
             for aprendiz_intento in range(3):
                 os.system('cls')
                 user = input("Ingrese su usuario de aprendíz: ")
@@ -351,8 +387,18 @@ while True:
                         login_exitoso = True
                         break  # Salir del bucle para el login del aprendiz
                 if login_exitoso:
+                    fecha_actual = datetime.now()
+                    #ver la diferencia de los días
+                    diferencia_dias = (fecha_actual - fecha_inicio).days
+                    # Calcular el número de semana basado en la diferencia de días (7 días por semana)
+                    semana_actual = (diferencia_dias // 7) + 1
+                    semana_asignada = aprendiz_dato[7]
+                    if semana_actual != semana_asignada:
+                        print(f"Advertencia: No está en su semana asignada. Está en la semana {semana_asignada}, pero la semana actual es {semana_actual}.")
+                        print("No puede reclamar el almuerzo en esta semana.")
+                        break
                     # Mostrar información después del login exitoso
-                    print(f"Señor(a) {aprendiz_dato[0]} {aprendiz_dato[1]}, su semana de alimentación es la semana no. {aprendiz_dato[7]} ")
+                    print(f"Señor(a) {aprendiz_dato[0]} {aprendiz_dato[1]}, su semana de alimentación es la semana no. {datos_aprendiz[7]} ")
                     print(f"El número de raciones que usted tiene disponibles es {raciones}")
                     print("\n")
                     print("Semana 1: alimentación para el programa de ADSO, GESTION ADMINISTRATIVA")
@@ -398,17 +444,35 @@ while True:
                         os.system('cls')
                     break  # Salir del bucle principal si el login es exitoso
                 else:
-                    print("\nSu usuario o contraseña son inválidos")
+                    intentos_fallidos += 1
+                    print("Usuario o contraseña incorrectos")
                     if aprendiz_intento < 2:
-                        print("Intente nuevamente")
+                        print("Intente nuevamente.")
                     else:
                         print("\nSus credenciales de acceso al sistema han sido bloqueadas")
-                        aprendiz_bloqueado = f"{user}"  # Utiliza el usuario ingresado
+                        aprendiz_bloqueado = user  # Utiliza el usuario ingresado
                         aprendices_bloqueados.append(aprendiz_bloqueado)
-                        input("Presione Enter para regresar al menú principal.")
-                        os.system('cls')
+                        aprendiz_dato[5] = 0
+                    input("Presione Enter para continuar")
+                    os.system('cls')
         else:
             print("Opción no válida. Por favor, intente de nuevo.")
             input("Presione Enter para regresar al menú principal.")
             os.system('cls')
+    elif interaccion == "3":
+        print("Semanas de Alimentación:")
+        print("Semana 1: alimentación para el programa de ADSO, GESTION ADMINISTRATIVA")
+        print("Semana 2: alimentación para el programa de GESTION EMPRESARIAL, ANIMACION 3D")
+        print("Semana 3: alimentación para el programa de MULTIMEDIA, MODISTERIA")
+        print("Semana 4: alimentación para el programa de COCINA, GANADERIA")
+        print("\n")
+        print("\nMenú Semanal de Almuerzos")
+        print("=" * 40)
+        print("Lunes: Sopa de Lentejas con Arroz, Arepa, y Ensalada")
+        print("Martes: Ajiaco Santafereño con Pollo y Guasca, acompañado de Arroz y Aguacate")
+        print("Miércoles: Bandeja Paisa: Arroz, Frijoles, Carne Molida, Chicharrón, Plátano, Arepa, y Huevo Frito")
+        print("Jueves: Sancocho de Gallina con Papa, Yuca, y Plátano, acompañado de Arroz y Aguacate")
+        print("Viernes: Cazuela de Mariscos con Arroz y Patacones")
+        print("=" * 40)
+        input("\nPresione Enter para salir")
     
