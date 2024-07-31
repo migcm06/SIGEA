@@ -2,11 +2,11 @@ import random
 import string
 import os
 from datetime import datetime
-
+import re
 #definiendo fecha de inicio
 fecha_inicio = datetime(2024, 7, 29)
-
 caracteres = string.ascii_letters + string.digits  # Lista que almacena caracteres para hacer la contraseña
+regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" # variable con la que se realizará la validación del email
 admin = "Admin"
 admin_password = "1234"  # Creación de las credenciales de acceso del Admin
 # Moods para cada usuario manejados por booleanos
@@ -45,7 +45,7 @@ while True:
     print("2. Aprendíz.")
     print("3. Invitado.")
     print("4. Salir.")
-    interaccion = input("Digite su tipo de usuario para continuar:")
+    interaccion = input("Digite un número para continuar: ")
     if interaccion == "4":
         print("\nHasta la próxima.")
         break
@@ -76,7 +76,7 @@ while True:
                 print("1. Registrar Aprendíz") #LISTO
                 print("2. Consultar Aprendices Registrados") #LISTO
                 print("3. Modificar un registro") #LISTO
-                print("4. Desbloquear usuario por ingreso erróneo")
+                print("4. Desbloquear usuario por ingreso erróneo")#listo
                 print("5. Actualización de Menú")#LISTO
                 print("6. Reasignación de Semanas")
                 print("7. Eliminar Aprendíz")#LISTO
@@ -135,7 +135,6 @@ while True:
                     os.system('cls')
                     print("\nDesbloquear usuario por ingreso erróneo") #VGbOjYcXprint
                     print("**Lista de aprendices bloqueados**")
-                    
                     if aprendices_bloqueados:
                         for i, bloqueado in enumerate(aprendices_bloqueados, start=1):
                             print(f"{i}. {bloqueado}")
@@ -209,14 +208,12 @@ while True:
                     print("\nRegistrar Usuarios")
                     modo_registro = True
                     salir_modo_registro = False
-                    
                     while modo_registro and len(aprendices_info) < aprendices:
                         datos_aprendiz = []
                         datos_aprendiz.append(input("Ingrese primer nombre del aprendíz: "))
                         datos_aprendiz.append(input("Ingrese el segundo nombre del aprendiz: "))
                         datos_aprendiz.append(input("Ingrese el primer apellido del aprendíz: "))
                         datos_aprendiz.append(input("Ingrese el número de documento del aprendíz: "))
-                        
                         while True:
                             print("Seleccione el programa de formación del aprendiz: ")
                             print("1. ADSO")
@@ -242,15 +239,18 @@ while True:
                                     )
                                     break
                                 else:
-                                    print("Opción inválida. Por favor, ingrese un número entre 1 y 7.")
+                                    print("Opción inválida. Por favor, ingrese un número entre 1 y 8.")
                             except ValueError:
                                 print("Debe ingresar un número entero.")
-                        
-                        datos_aprendiz.append(input("Ingrese el correo electrónico del aprendíz: ")) 
-                        
+                        while True:
+                            correo = (input("Ingrese el correo electrónico del aprendíz: ")) 
+                            if re.match(regex, correo):
+                                datos_aprendiz.append(correo)
+                                break
+                            else:
+                                print("Correo Invalido, por favor intente nuevamente")
                         contrasena = ''.join(random.sample(caracteres, 8))
                         datos_aprendiz.append(contrasena) 
-
                         primera_letra_primer_nombre = datos_aprendiz[0][0].lower()
                         primera_letra_segundo_nombre = datos_aprendiz[1][0].lower()
                         apellido = datos_aprendiz[2].lower()
@@ -258,17 +258,13 @@ while True:
                         usuario = usuario_formado
                         contador = 1
                         usuarios_creados = [aprendiz[6] for aprendiz in aprendices_info]
-                        
                         while usuario in usuarios_creados:
                             usuario = usuario_formado + str(contador)
                             contador += 1
-                        
                         datos_aprendiz.append(usuario)
                         aprendices_info.append(datos_aprendiz)
-                        
                         print(f"\n¡El aprendiz {datos_aprendiz[0]} {datos_aprendiz[2]} ha sido registrado exitosamente!")
                         print("\n" * 3)
-                        
                         if datos_aprendiz[4].lower() in ("adso", "gestión administrativa"):
                             semana_alimentacion = 1
                         elif datos_aprendiz[4].lower() in ("gestión empresarial", "animación 3d"):
@@ -280,7 +276,6 @@ while True:
                         else:
                             print("\nNo se ha encontrado una semana asignada")
                         datos_aprendiz.append(semana_alimentacion)
-                        
                         while True:
                             continuar_registro = input("Continuar registrando? (si/no): ").lower()
                             if continuar_registro == "si":
@@ -294,7 +289,6 @@ while True:
                                 break
                             else:
                                 print("Por favor ingrese una opción para continuar")
-
                         if salir_modo_registro:
                             break
                 elif opcion_admin != ("1","2","3","4","5","6","7","8"):
@@ -332,8 +326,7 @@ while True:
             if not encontrado:
                 print("Documento no encontrado.")
             input("Presione Enter para regresar al menú principal.")
-            os.system('cls')
-            
+            os.system('cls')    
         elif interaccion_aprendiz == "3":
             os.system('cls')
             print("**Ver y/o Recuperar Contraseña/Usuario**")
@@ -345,12 +338,10 @@ while True:
                     print(f"El usuario es {i[6]}.")
                     encontrado = True
                     break
-
             if not encontrado:
                 print("Documento no encontrado.")
             input("Presione Enter para regresar al menú principal.")
             os.system('cls')
-            
         elif interaccion_aprendiz == "2":
             os.system('cls')
             print("**Registrarse**")
@@ -388,7 +379,13 @@ while True:
                                 print("Opción inválida. Por favor, ingrese un número entre 1 y 7.")
                         except ValueError:
                             print("Debe ingresar un número entero.")
-                datos_aprendiz.append(input("Ingrese el correo electrónico del aprendiz: "))
+                while True:
+                    correo = (input("Ingrese el correo electrónico del aprendíz: ")) 
+                    if re.match(regex, correo):
+                        datos_aprendiz.append(correo)
+                        break
+                    else:
+                        print("**Correo Invalido, por favor intente nuevamente***")
                 contrasena = ''.join(random.sample(caracteres, 8))  # Generación de la contraseña para el aprendiz registrado
                 datos_aprendiz.append(contrasena)
                 # Generador de usuario
@@ -427,7 +424,6 @@ while True:
         elif interaccion_aprendiz == "1":
             login_exitoso = False
             intentos_fallidos = 0
-
             for aprendiz_intento in range(3):
                 os.system('cls')
                 user = input("Ingrese su usuario de aprendíz: ")
@@ -488,7 +484,6 @@ while True:
                             print("Hasta el próximo almuerzo")
                         else:
                             print("Por favor ingrese 'si' o 'no'.")
-
                         input("\nPresione Enter para continuar al siguiente día.")
                         if raciones == 0:
                             break
@@ -524,4 +519,3 @@ while True:
             print(f"{dias_semana[i].capitalize()}: {plato}")
         print("=" * 40)
         input("\nPresione Enter para salir")
-    
