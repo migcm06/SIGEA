@@ -411,11 +411,8 @@ while True:
                     elif ver_menu.lower() == "si":
                         print("\nMenú Semanal de Almuerzos")
                         print("=" * 40)
-                        print("Lunes: Sopa de Lentejas con Arroz, Arepa, y Ensalada")
-                        print("Martes: Ajiaco Santafereño con Pollo y Guasca, acompañado de Arroz y Aguacate")
-                        print("Miércoles: Bandeja Paisa: Arroz, Frijoles, Carne Molida, Chicharrón, Plátano, Arepa, y Huevo Frito")
-                        print("Jueves: Sancocho de Gallina con Papa, Yuca, y Plátano, acompañado de Arroz y Aguacate")
-                        print("Viernes: Cazuela de Mariscos con Arroz y Patacones")
+                        for i, plato in enumerate(menu_actual):
+                            print(f"{dias_semana[i].capitalize()}: {plato}")
                         print("=" * 40)
                     # Gestión de raciones
                     for dia in range(len(dias_semana)):
@@ -460,6 +457,7 @@ while True:
             input("Presione Enter para regresar al menú principal.")
             os.system('cls')
     elif interaccion == "3":
+        os.system('cls')
         print("Semanas de Alimentación:")
         print("Semana 1: alimentación para el programa de ADSO, GESTION ADMINISTRATIVA")
         print("Semana 2: alimentación para el programa de GESTION EMPRESARIAL, ANIMACION 3D")
@@ -468,11 +466,8 @@ while True:
         print("\n")
         print("\nMenú Semanal de Almuerzos")
         print("=" * 40)
-        print("Lunes: Sopa de Lentejas con Arroz, Arepa, y Ensalada")
-        print("Martes: Ajiaco Santafereño con Pollo y Guasca, acompañado de Arroz y Aguacate")
-        print("Miércoles: Bandeja Paisa: Arroz, Frijoles, Carne Molida, Chicharrón, Plátano, Arepa, y Huevo Frito")
-        print("Jueves: Sancocho de Gallina con Papa, Yuca, y Plátano, acompañado de Arroz y Aguacate")
-        print("Viernes: Cazuela de Mariscos con Arroz y Patacones")
+        for i, plato in enumerate(menu_actual):
+            print(f"{dias_semana[i].capitalize()}: {plato}")
         print("=" * 40)
         input("\nPresione Enter para salir")
     
