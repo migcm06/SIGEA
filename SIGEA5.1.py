@@ -191,14 +191,14 @@ while True:
                         print("\n**Listado de Aprendices Registrados:**")
                         for aprendiz_numero, datos_aprendiz in enumerate(aprendices_info, 1):
                             print(f"\n**Aprendiz {aprendiz_numero}:**")
-                            print(f"Nombre: {datos_aprendiz[0]}")
-                            print(f"Apellido: {datos_aprendiz[1]}")
-                            print(f"ID: {datos_aprendiz[2]}")
-                            print(f"Programa: {datos_aprendiz[3]}")
-                            print(f"Email: {datos_aprendiz[4]}")
-                            print(f"Contraseña: {datos_aprendiz[5]}")
-                            print(f"Usuario: {datos_aprendiz[6]}")
-                            print(f"Semana de Alimentación: {datos_aprendiz[7]}")                 
+                            print(f"Nombre: {datos_aprendiz[0]} {datos_aprendiz[1]}")
+                            print(f"Apellido: {datos_aprendiz[2]}")
+                            print(f"ID: {datos_aprendiz[3]}")
+                            print(f"Programa: {datos_aprendiz[4]}")
+                            print(f"Email: {datos_aprendiz[5]}")
+                            print(f"Contraseña: {datos_aprendiz[6]}")
+                            print(f"Usuario: {datos_aprendiz[7]}")
+                            print(f"Semana de Alimentación: {datos_aprendiz[8]}")                 
                         input("\nPresione Enter para regresar al menú del administrador ")
                         os.system('cls')
                     else:
@@ -212,7 +212,8 @@ while True:
                     
                     while modo_registro and len(aprendices_info) < aprendices:
                         datos_aprendiz = []
-                        datos_aprendiz.append(input("Ingrese primer y segundo nombre del aprendiz: "))
+                        datos_aprendiz.append(input("Ingrese primer nombre del aprendíz: "))
+                        datos_aprendiz.append(input("Ingrese el segundo nombre del aprendiz: "))
                         datos_aprendiz.append(input("Ingrese el primer apellido del aprendíz: "))
                         datos_aprendiz.append(input("Ingrese el número de documento del aprendíz: "))
                         
@@ -225,9 +226,10 @@ while True:
                             print("5. Multimedia")
                             print("6. Modistería")
                             print("7. Gestión Empresarial")
+                            print("8. Ganadería")
                             try:
                                 programa = int(input("Escriba el número del programa del aprendiz para continuar: "))
-                                if 1 <= programa <= 7:
+                                if 1 <= programa <= 8:
                                     datos_aprendiz.append(
                                         "ADSO" if programa == 1 else
                                         "Gestión Administrativa" if programa == 2 else
@@ -235,7 +237,8 @@ while True:
                                         "Animación 3D" if programa == 4 else
                                         "Multimedia" if programa == 5 else
                                         "Modistería" if programa == 6 else
-                                        "Gestión Empresarial"
+                                        "Gestión Empresarial" if programa == 7 else
+                                        "Ganadería"
                                     )
                                     break
                                 else:
@@ -247,11 +250,10 @@ while True:
                         
                         contrasena = ''.join(random.sample(caracteres, 8))
                         datos_aprendiz.append(contrasena) 
-                        
-                        partes_nombre = datos_aprendiz[0].split()
-                        primera_letra_primer_nombre = partes_nombre[0][0].lower()
-                        primera_letra_segundo_nombre = partes_nombre[1][0].lower()
-                        apellido = datos_aprendiz[1].lower()
+
+                        primera_letra_primer_nombre = datos_aprendiz[0][0].lower()
+                        primera_letra_segundo_nombre = datos_aprendiz[1][0].lower()
+                        apellido = datos_aprendiz[2].lower()
                         usuario_formado = primera_letra_primer_nombre + primera_letra_segundo_nombre + "_" + apellido
                         usuario = usuario_formado
                         contador = 1
@@ -264,20 +266,19 @@ while True:
                         datos_aprendiz.append(usuario)
                         aprendices_info.append(datos_aprendiz)
                         
-                        print(f"\n¡El aprendiz {datos_aprendiz[0]} {datos_aprendiz[1]} ha sido registrado exitosamente!")
+                        print(f"\n¡El aprendiz {datos_aprendiz[0]} {datos_aprendiz[2]} ha sido registrado exitosamente!")
                         print("\n" * 3)
                         
-                        if datos_aprendiz[3].lower() in ("adso", "gestión administrativa"):
+                        if datos_aprendiz[4].lower() in ("adso", "gestión administrativa"):
                             semana_alimentacion = 1
-                        elif datos_aprendiz[3].lower() in ("gestión empresarial", "animación 3d"):
+                        elif datos_aprendiz[4].lower() in ("gestión empresarial", "animación 3d"):
                             semana_alimentacion = 2
-                        elif datos_aprendiz[3].lower() in ("multimedia", "modistería"):
+                        elif datos_aprendiz[4].lower() in ("multimedia", "modistería"):
                             semana_alimentacion = 3
-                        elif datos_aprendiz[3].lower() in ("cocina", "ganadería"):
+                        elif datos_aprendiz[4].lower() in ("cocina", "ganadería"):
                             semana_alimentacion = 4
                         else:
                             print("\nNo se ha encontrado una semana asignada")
-                        
                         datos_aprendiz.append(semana_alimentacion)
                         
                         while True:
@@ -355,43 +356,45 @@ while True:
             print("**Registrarse**")
             if len(aprendices_info) <= 20:
                 datos_aprendiz = []
-                datos_aprendiz.append(input("Ingrese su primer y segundo nombre: "))
+                datos_aprendiz.append(input("Ingrese su primer nombre: "))
+                datos_aprendiz.append(input("Ingrese su segundo nombre: "))
                 datos_aprendiz.append(input("Ingrese su primer apellido: "))
                 datos_aprendiz.append(input("Ingrese su número de documento: "))
                 while True:
-                    print("Seleccione su programa de formación: ")
-                    print("1. ADSO")
-                    print("2. GESTIÓN ADMINISTRATIVA")
-                    print("3. COCINA")
-                    print("4. ANIMACIÓN 3D")
-                    print("5. MULTIMEDIA")
-                    print("6. MODISTERÍA")
-                    print("7. GESTIÓN EMPRESARIAL")
-                    try:
-                        programa = int(input("Escriba el número de su programa para continuar: "))
-                        if 1 <= programa <= 7:
-                            datos_aprendiz.append(
-                                "ADSO" if programa == 1 else
-                                "Gestión Administrativa" if programa == 2 else
-                                "Cocina" if programa == 3 else
-                                "Animación 3D" if programa == 4 else
-                                "Multimedia" if programa == 5 else
-                                "Modistería" if programa == 6 else
-                                "Gestión Empresarial"
-                            )
-                            break
-                        else:
-                            print("Opción inválida. Por favor, ingrese un número entre 1 y 7.")
-                    except ValueError:
-                        print("Debe ingresar un número entero.")
+                        print("Seleccione el programa de formación del aprendiz: ")
+                        print("1. ADSO")
+                        print("2. Gestión Administrativa")
+                        print("3. Cocina")
+                        print("4. Animación 3D")
+                        print("5. Multimedia")
+                        print("6. Modistería")
+                        print("7. Gestión Empresarial")
+                        print("8. Ganadería")
+                        try:
+                            programa = int(input("Escriba el número de su programa para continuar: "))
+                            if 1 <= programa <= 8:
+                                datos_aprendiz.append(
+                                    "ADSO" if programa == 1 else
+                                    "Gestión Administrativa" if programa == 2 else
+                                    "Cocina" if programa == 3 else
+                                    "Animación 3D" if programa == 4 else
+                                    "Multimedia" if programa == 5 else
+                                    "Modistería" if programa == 6 else
+                                    "Gestión Empresarial" if programa == 7 else
+                                    "Ganadería"
+                                )
+                                break
+                            else:
+                                print("Opción inválida. Por favor, ingrese un número entre 1 y 7.")
+                        except ValueError:
+                            print("Debe ingresar un número entero.")
                 datos_aprendiz.append(input("Ingrese el correo electrónico del aprendiz: "))
                 contrasena = ''.join(random.sample(caracteres, 8))  # Generación de la contraseña para el aprendiz registrado
                 datos_aprendiz.append(contrasena)
                 # Generador de usuario
-                partes_nombre = datos_aprendiz[0].split()
-                primera_letra_primer_nombre = partes_nombre[0][0].lower()
-                primera_letra_segundo_nombre = partes_nombre[1][0].lower()
-                apellido = datos_aprendiz[1].lower()
+                primera_letra_primer_nombre = datos_aprendiz[0][0].lower()
+                primera_letra_segundo_nombre = datos_aprendiz[1][0].lower()
+                apellido = datos_aprendiz[2].lower()
                 usuario_formado = primera_letra_primer_nombre + primera_letra_segundo_nombre + "_" + apellido
                 usuario = usuario_formado
                 contador = 1
@@ -401,21 +404,24 @@ while True:
                     contador += 1
                 datos_aprendiz.append(usuario)
                 # Determinar la semana de alimentación
-                if datos_aprendiz[3].lower() in ("adso", "gestión administrativa"):
+                if datos_aprendiz[4].lower() in ("adso", "gestión administrativa"):
                     semana_alimentacion = 1
-                elif datos_aprendiz[3].lower() in ("gestión empresarial", "animación 3d"):
+                elif datos_aprendiz[4].lower() in ("gestión empresarial", "animación 3d"):
                     semana_alimentacion = 2
-                elif datos_aprendiz[3].lower() in ("multimedia", "modistería"):
+                elif datos_aprendiz[4].lower() in ("multimedia", "modistería"):
                     semana_alimentacion = 3
-                elif datos_aprendiz[3].lower() in ("cocina", "ganadería"):
+                elif datos_aprendiz[4].lower() in ("cocina", "ganadería"):
                     semana_alimentacion = 4
                 else:
                     semana_alimentacion = None
                 datos_aprendiz.append(semana_alimentacion)
                 aprendices_info.append(datos_aprendiz)
-                print(f"\n¡El aprendiz {datos_aprendiz[0]} {datos_aprendiz[1]} ha sido registrado exitosamente!")
+                print(f"\n¡{datos_aprendiz[0]} {datos_aprendiz[2]} ha sido registrado exitosamente!")
+                print(f"Usuario: {datos_aprendiz[7]}")
+                print(f"Contraseña: {datos_aprendiz[6]}")
             else:
                 print("No hay cupo disponible para nuevos registros.")
+            print("\n")
             input("Presione Enter para regresar al menú principal.")
             os.system('cls')      
         elif interaccion_aprendiz == "1":
